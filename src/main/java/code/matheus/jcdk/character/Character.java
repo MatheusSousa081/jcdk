@@ -1,7 +1,7 @@
-package code.matheus.jdck.character;
+package code.matheus.jcdk.character;
 
-import code.matheus.jdck.attribute.Attribute;;
-import code.matheus.jdck.attribute.Level;
+import code.matheus.jcdk.attribute.Attribute;;
+import code.matheus.jcdk.attribute.Level;
 import org.jetbrains.annotations.NotNull;
 
 public interface Character extends Attribute {

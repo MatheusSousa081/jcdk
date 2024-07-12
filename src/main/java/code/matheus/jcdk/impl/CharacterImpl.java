@@ -1,13 +1,15 @@
-package code.matheus.jdck.impl;
+package code.matheus.jcdk.impl;
 
-import code.matheus.jdck.character.Character;
-import code.matheus.jdck.attribute.Level;
+import code.matheus.jcdk.character.Character;
+import code.matheus.jcdk.attribute.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.lang.reflect.Field;
 
-public class CharacterImpl implements Character {
+class CharacterImpl implements Character {
+    //Variables
+
     private @NotNull String name;
     private @NotNull Gender gender;
     private final double initialHealth = 10;
@@ -21,10 +23,14 @@ public class CharacterImpl implements Character {
 
     private final @NotNull ImproveAttributes improveAttributes = new ImproveAttributes();
 
+    //Constructors
+
     private CharacterImpl(@NotNull String name, @NotNull Gender gender) {
         this.name = name;
         this.gender = gender;
     }
+
+    //Getters and Setters
 
     @Override
     public @NotNull String getName() {
@@ -112,12 +118,24 @@ public class CharacterImpl implements Character {
         this.defense = defense;
     }
 
+    public @NotNull ImproveAttributes getImproveAttributes() {
+        return improveAttributes;
+    }
+
+    //Modules
+
+    private void revive() {
+        health = initialHealth;
+    }
+
     public void checkDeath() {
         if (health <= 0) {
             deaths++;
             revive();
         }
     }
+
+    //toString
 
     @Override
     public String toString() {
@@ -130,17 +148,11 @@ public class CharacterImpl implements Character {
                 ", agility=" + agility +
                 ", level=" + experience.getLevel() +
                 ", experience=" + experience.getPoints() +
-                ", points=" + getImproveAttribute().getAvailablePoints() +
+                ", points=" + getImproveAttributes().getAvailablePoints() +
                 '}';
     }
 
-    private void revive() {
-        health = initialHealth;
-    }
-
-    public ImproveAttributes getImproveAttribute() {
-        return improveAttributes;
-    }
+    //Class
 
     public final class ImproveAttributes {
         private int availablePoints = 0;
@@ -149,7 +161,7 @@ public class CharacterImpl implements Character {
             return availablePoints;
         }
 
-        public void addPoints(int points) {
+        public void addPoints(@Range(from = 1, to = 10) int points) {
             this.availablePoints += points;
         }
 

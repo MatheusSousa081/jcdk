@@ -1,19 +1,14 @@
-package code.matheus.jdck.impl;
+package code.matheus.jcdk.impl;
 
-import code.matheus.jdck.character.Character;
-import code.matheus.jdck.serialization.Serializer;
-import code.matheus.jdck.util.CharacterCreator;
-import com.google.gson.Gson;
+import code.matheus.jcdk.character.Character;
+import code.matheus.jcdk.util.CharacterCreator;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 
-public final class JsonSerializer implements Serializer {
-    private final @NotNull Gson gson = new Gson();
-
-    @Override
+public final class JsonSerializer{
     public void serialize(@NotNull CharacterImpl character, @NotNull String path) {
         try (JsonWriter writer = new JsonWriter(new BufferedWriter(new FileWriter(path)))) {
             writer.beginObject();
@@ -25,14 +20,13 @@ public final class JsonSerializer implements Serializer {
             writer.name("defense").value(character.getDefense());
             writer.name("level").value(character.getLevel());
             writer.name("xp").value(character.getExperience().getPoints());
-            writer.name("points").value(character.getImproveAttribute().getAvailablePoints());
+            writer.name("points").value(character.getImproveAttributes().getAvailablePoints());
             writer.endObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
     public @NotNull String serialize(@NotNull CharacterImpl character) {
         return "CharacterImpl{" +
                 "name='" + character.getName() + '\'' +
@@ -43,11 +37,10 @@ public final class JsonSerializer implements Serializer {
                 ", agility=" + character.getAgility() +
                 ", level=" + character.getLevel() +
                 ", experience=" + character.getExperience().getPoints() +
-                ", points=" + character.getImproveAttribute().getAvailablePoints() +
+                ", points=" + character.getImproveAttributes().getAvailablePoints() +
                 '}';
     }
 
-    @Override
     public @NotNull CharacterImpl deserializer(@NotNull File file) {
         try (JsonReader reader = new JsonReader(new BufferedReader(new FileReader(file.getPath())))) {
             CharacterImpl character = CharacterCreator.create("", Character.Gender.MAN, CharacterImpl.class);
@@ -63,7 +56,7 @@ public final class JsonSerializer implements Serializer {
                     case "defense" -> character.setDefense(reader.nextDouble());
                     case "level" -> character.setLevel(reader.nextInt());
                     case "xp" -> character.getExperience().add(reader.nextInt());
-                    case "points" -> character.getImproveAttribute().addPoints(reader.nextInt());
+                    case "points" -> character.getImproveAttributes().addPoints(reader.nextInt());
                 }
             }
             reader.endObject();
@@ -73,14 +66,13 @@ public final class JsonSerializer implements Serializer {
         }
     }
 
-    @Override
     public @NotNull Character deserializer(@NotNull String string) {
-        String data = string.substring(string.indexOf("{") + 1, string.lastIndexOf("}"));
+        @NotNull String data = string.substring(string.indexOf("{") + 1, string.lastIndexOf("}"));
 
         // Dividir os dados com base nas vírgulas
-        String[] parts = data.split(",");
+        @NotNull String[] parts = data.split(",");
 
-        CharacterImpl character = CharacterCreator.create("name", Character.Gender.MAN, CharacterImpl.class);
+        @NotNull CharacterImpl character = CharacterCreator.create("name", Character.Gender.MAN, CharacterImpl.class);
 
         // Iterar sobre os campos e extrair os valores correspondentes
         for (String part : parts) {
@@ -96,7 +88,7 @@ public final class JsonSerializer implements Serializer {
                 case "defense"-> character.setDefense(Double.parseDouble(value));
                 case "level"-> character.setLevel(Integer.parseInt(value));
                 case "experience"-> character.getExperience().add(Integer.parseInt(value));
-                case "points"-> character.getImproveAttribute().addPoints(Integer.parseInt(value));
+                case "points"-> character.getImproveAttributes().addPoints(Integer.parseInt(value));
             }
         }
         return character;

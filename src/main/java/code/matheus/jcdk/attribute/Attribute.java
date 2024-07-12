@@ -1,4 +1,4 @@
-package code.matheus.jdck.attribute;
+package code.matheus.jcdk.attribute;
 
 import org.jetbrains.annotations.NotNull;
 

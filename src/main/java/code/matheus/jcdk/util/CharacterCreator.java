@@ -1,6 +1,6 @@
-package code.matheus.jdck.util;
+package code.matheus.jcdk.util;
 
-import code.matheus.jdck.character.Character;
+import code.matheus.jcdk.character.Character;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
